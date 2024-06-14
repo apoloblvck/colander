@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>colander (view-exif)</title>
+    <meta name="description" content="ultra.">
+    <meta name="keywords" content="exif">
+    <meta name="author" content="colander">
+    <meta name="robots" content="index,follow">
+    <meta name="theme-color" content="#000">
+
+    <link rel="icon" href="icon/1.png" type="image/x-icon">
+    <link rel="shortcut icon" href="icon/1.png" type="image/x-icon">
+    <link rel="stylesheet" href="view-exif.css">
+
+</head>
+<body>
+    
+    <img src="./icon/2.png" id="home">
+    <h1>VIEW EXIF DATA FROM ANY FILE :<div id="select-text">No file selected.</div><div id="data"><pre id="data2"></pre></div></h1>
+    
+    <div id="buttons">
+        <pre id="pre2">
+  ,-""-.     ,-""-.
+ / ,--. \   / ,--. \
+| ( () ) | | ( () ) |
+ \ `--' /   \ `--' /
+  `-..-'     `-..-' 
+        </pre>    
+        <label for="fileInput" class="button">
+            <input type="file" id="fileInput">
+            Choose a file
+        </label>
+    </div> 
+
+    <script>
+
+        document.getElementById('home').addEventListener('click',()=>{window.location.href = '/'})
+
+        const fileInput = document.getElementById('fileInput');
+        const select_text = document.getElementById('select-text');
+
+        fileInput.addEventListener('change', function(event) {
+
+            if (event.target.files && event.target.files[0]) {
+                const selectedFile = event.target.files[0];
+                select_text.innerText = selectedFile.name;
+                document.getElementById('buttons').classList.add("active");
+                document.getElementById('data').style.display = 'block';
+                
+                ///////////////console exif here/////////
+                document.getElementById('data').style.display = 'block';
+                document.getElementById('data2').innerText=`
+
+                soooooooon....
+                <?php
+                    $image = $_FILES["image"]["tmp_name"];
+                    $output = shell_exec("exiftool $image");
+                    echo $output;    
+                ?>
+                `
+            }else{
+                select_text.innerText = "No file selected.";
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
