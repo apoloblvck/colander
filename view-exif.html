@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>colander (view-exif)</title>
-    <meta name="description" content="ultra.">
+    <meta name="description" content="exif">
     <meta name="keywords" content="exif">
     <meta name="author" content="colander">
     <meta name="robots" content="index,follow">
@@ -13,12 +13,12 @@
     <link rel="icon" href="icon/1.png" type="image/x-icon">
     <link rel="shortcut icon" href="icon/1.png" type="image/x-icon">
     <link rel="stylesheet" href="view-exif.css">
-
+    <script src="exif.js"></script>
 </head>
 <body>
     
     <img src="./icon/2.png" id="home">
-    <h1>VIEW EXIF DATA FROM ANY FILE :<div id="select-text">No file selected.</div><div id="data"><pre id="data2"></pre></div></h1>
+    <h1>VIEW EXIF DATA FROM JPG :<div id="select-text">No file selected.</div><div id="data"></div></h1>
     
     <div id="buttons">
         <pre id="pre2">
@@ -28,7 +28,7 @@
  \ `--' /   \ `--' /
   `-..-'     `-..-' 
         </pre>    
-        <label for="fileInput" class="button">
+        <label for="fileInput" class="button" accept=".jpg, .jpeg">
             <input type="file" id="fileInput">
             Choose a file
         </label>
@@ -36,7 +36,7 @@
 
     <script>
 
-        document.getElementById('home').addEventListener('click',()=>{window.location.href = '/colander/'})
+        document.getElementById('home').addEventListener('click',()=>{window.location.href = '/'})
 
         const fileInput = document.getElementById('fileInput');
         const select_text = document.getElementById('select-text');
@@ -51,15 +51,33 @@
                 
                 ///////////////console exif here/////////
                 document.getElementById('data').style.display = 'block';
-                document.getElementById('data2').innerText=`
 
-                soooooooon....
-                <?php
-                    $image = $_FILES["image"]["tmp_name"];
-                    $output = shell_exec("exiftool $image");
-                    echo $output;    
-                ?>
-                `
+
+
+
+
+                var reader = new FileReader();
+    
+                reader.onload = function(event) {
+                    var exifData = EXIF.readFromBinaryFile(event.target.result);
+                    var exifContent = "<h3>EXIF Data:</h3><ul>";
+                    let a = 0; 
+                    for (var key in exifData) {
+                        if (exifData.hasOwnProperty(key)) {
+                            a++
+                            exifContent += "<li><strong>" + key + ":</strong> " + exifData[key] + "</li>";
+                        }
+                    }
+                    if(a==0){
+                        exifContent += "no exif data in ("+ selectedFile.name +")";
+                    }
+                    exifContent += "</ul>";
+                    document.getElementById('data').innerHTML = exifContent;
+                };
+    
+
+                reader.readAsArrayBuffer(selectedFile);
+
             }else{
                 select_text.innerText = "No file selected.";
             }
